@@ -1,70 +1,54 @@
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.Assert.*; //import the junit Assert method statically
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.ArrayList;
 
-public class MarkdownParseTest {
-    @Test
-    public void addition() {
-        assertEquals(2, 1 + 1);
+import org.junit.*; //import the junit library
+
+public class MarkdownParseTest { // create a class called MarkdownParseTest
+    @Test // Annotation to tell java to test
+    public void addition() { // test method
+        assertEquals(2, 1 + 1); // the test
     }
 
     @Test
-    public void testFile1() throws IOException {
-        String contents = Files.readString(Path.of("test-file.md"));
-        List<String> expect = List.of("https://something.com", "some-page.html");
-        assertEquals(MarkdownParse.getLinks(contents), expect);
+    public void testGetLinks() throws IOException {
+        String[] args = { "test-file.md" };
+        Path fileName = Path.of(args[0]);
+        String contents = Files.readString(fileName);
+        ArrayList<String> links = MarkdownParse.getLinks(contents);
+        assertEquals(links.toString(),
+                "[https://something.com, some-page.html]");
     }
 
     @Test
-    public void testFile2() throws IOException {
-        String contents = Files.readString(Path.of("test-file2.md"));
-        List<String> expect = List.of("https://something.com", "some-page.html");
-        assertEquals(MarkdownParse.getLinks(contents), expect);
+    public void testGetLinks2() throws IOException {
+        String[] args = { "new-test.md" };
+        Path fileName = Path.of(args[0]);
+        String contents = Files.readString(fileName);
+        ArrayList<String> links = MarkdownParse.getLinks(contents);
+        assertEquals(links.toString(),
+                "[https://www.google.com, www.bing.com]");
     }
 
+    // test all 8 test files
     @Test
-    public void testFile3() throws IOException {
-        String contents = Files.readString(Path.of("test-file3.md"));
-        List<String> expect = List.of();
-        assertEquals(MarkdownParse.getLinks(contents), expect);
-    }
-
-    @Test
-    public void testFile4() throws IOException {
-        String contents = Files.readString(Path.of("test-file4.md"));
-        List<String> expect = List.of();
-        assertEquals(MarkdownParse.getLinks(contents), expect);
-    }
-
-    @Test
-    public void testFile5() throws IOException {
-        String contents = Files.readString(Path.of("test-file5.md"));
-        List<String> expect = List.of();
-        assertEquals(MarkdownParse.getLinks(contents), expect);
-    }
-
-    @Test
-    public void testFile6() throws IOException {
-        String contents = Files.readString(Path.of("test-file6.md"));
-        List<String> expect = List.of();
-        assertEquals(MarkdownParse.getLinks(contents), expect);
-    }
-
-    @Test
-    public void testFile7() throws IOException {
-        String contents = Files.readString(Path.of("test-file7.md"));
-        List<String> expect = List.of();
-        assertEquals(MarkdownParse.getLinks(contents), expect);
-    }
-
-    @Test
-    public void testFile8() throws IOException {
-        String contents = Files.readString(Path.of("test-file8.md"));
-        List<String> expect = List.of("a link on the first line");
-        assertEquals(MarkdownParse.getLinks(contents), expect);
+    public void testGetLinks3() throws IOException {
+        String[] expected = { "[https://something.com, some-page.html]", "[]",
+                "[]", "[]", "[page.com]", "[]", "[]" };
+        for (int i = 2; i < 9; i++) {
+            String[] args = {
+                    "test-file" + i + ".md" };
+            Path fileName = Path.of(args[0]);
+            String contents = Files.readString(fileName);
+            ArrayList<String> links = MarkdownParse.getLinks(contents);
+            System.out.println(links.toString());
+            if (i - 2 < expected.length)
+                assertEquals(links.toString(), expected[i - 2]);
+            else
+                assertEquals(links.toString(), "");
+        }
     }
 }

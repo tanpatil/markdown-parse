@@ -1,4 +1,8 @@
 # Title
 
-![image path](imagepath.png)
+[a link!](https://something.com)
 [another link!](some-page.html)
+[]()
+[hi]
+[whatever]]()
+[](([]))
